@@ -584,23 +584,48 @@ Gradient Boosting Machine (GBM model ) Gradient Boosting Machine (for Regression
  
 #### Because of the combinatorial explosion, each additional hyperparameter that gets added to our grid search has a huge effect on the time to complete. Consequently, h2o provides an additional grid search path called “RandomDiscrete”, which will jump from one random combination to another and stop once a certain level of improvement has been made, certain amount of time has been exceeded, or a certain amount of models have been ran (or a combination of these have been met).
 
+```{r}
+# library(h2o)
+# h2o.init(nthreads = -1, max_mem_size = "8g")
+# 
+# 
+#  
+# ###  split dataset  Best approach by using the Gridsearch  (Skipped in the project )
+# 
+# datah2o <- as.h2o(dataset)
+# splits <- h2o.splitFrame(data = datah2o, 
+#                          ratios = c(0.7, 0.15),  #
+#                          seed = 1)  #setting a seed will guarantee reproducibility
+# train <- splits[[1]]
+# valid <- splits[[2]]
+# test <- splits[[3]]
+# 
+# 
+# # Identify predictors and response
+# x <- names(train)[which(names(train)!="logerror")]
+# y <- "logerror"
+# print(x)
+```
 
 
 ```{r}
-gbm.fit <- h2o.gbm(
-  x = x,
-  y = y,
-  training_frame = train,
-  nfolds = 5,
-  ntrees = 5000,
-  stopping_rounds = 10,
-  stopping_tolerance = 0,
-  seed = 123
-)
+#gbm.fit <- h2o.gbm(
+#  x = x,
+#  y = y,
+#  training_frame = train,
+#  nfolds = 5,
+#  ntrees = 5000,
+ # stopping_rounds = 10,
+ # stopping_tolerance = 0,
+ # seed = 123
+#)
 ```
 ```{r}
-h2o.varimp_plot(gbm.fit , num_of_features = 15) 
-h2o.mae(gbm.fit)
+#h2o.varimp_plot(gbm.fit , num_of_features = 15) 
+#h2o.mae(gbm.fit)
+```
+```{r}
+#h2o.shutdown()
 ```
 
 
@@ -616,6 +641,31 @@ Adding stochastic nature:
 sample_rate: row sample rate per tree
 col_sample_rate: column sample rate per tree (synonymous with xgboost’s colsample_bytree)
 
+
+
+```{r}
+ 
+h2o.init(nthreads = -1, max_mem_size = "8g")
+
+
+ 
+###  split dataset  Best approach by using the Gridsearch  (Skipped in the project )
+
+datah2o <- as.h2o(dataset)
+splits <- h2o.splitFrame(data = datah2o, 
+                         ratios = c(0.7, 0.15),  #
+                         seed = 1)  #setting a seed will guarantee reproducibility
+train <- splits[[1]]
+valid <- splits[[2]]
+test <- splits[[3]]
+
+
+# Identify predictors and response
+x <- names(train)[which(names(train)!="logerror")]
+y <- "logerror"
+print(x)
+```
+
 ```{r}
 # random grid search criteria
 search_criteria <- list(
@@ -625,7 +675,7 @@ search_criteria <- list(
   stopping_rounds = 10,
   max_runtime_secs = 60*60
   )
-
+#
 # perform grid search 
 grid <- h2o.grid(
   algorithm = "gbm",
@@ -634,7 +684,7 @@ grid <- h2o.grid(
   y = y, 
   training_frame = train,
   validation_frame = valid,
-  hyper_params = hyper_grid,
+  #hyper_params = hyper_grid,
   search_criteria = search_criteria, # add search criteria
   ntrees = 5000,
   stopping_rounds = 10,
@@ -746,6 +796,11 @@ h2o.performance(model = h2o.final, newdata = as.h2o(test))
 ```{r}
 # predict with h2o.predict
 #h2o.predict(h2o.final, newdata = as.h2o(test))
+```
+
+
+```{r}
+#h2o.shutdown()
 ```
 
  
