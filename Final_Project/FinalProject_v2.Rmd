@@ -795,7 +795,7 @@ h2o.performance(model = h2o.final, newdata = as.h2o(test))
 ```
 ```{r}
 # predict with h2o.predict
-#h2o.predict(h2o.final, newdata = as.h2o(test))
+ h2o.predict(h2o.final, newdata = as.h2o(test))
 ```
 
 
