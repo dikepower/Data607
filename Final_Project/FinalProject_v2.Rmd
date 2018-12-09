@@ -556,7 +556,7 @@ h2o.init(nthreads = -1, max_mem_size = "8g")
 
 datah2o <- as.h2o(dataset)
 splits <- h2o.splitFrame(data = datah2o, 
-                         ratios = c(0.7, 0.3),  #训练集，验证集与测试集比例分别为70%, 15%, 15%
+                         ratios = c(0.7, 0.15),  #
                          seed = 1)  #setting a seed will guarantee reproducibility
 train <- splits[[1]]
 valid <- splits[[2]]
